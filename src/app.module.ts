@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ActorModule } from './actor/actor.module';
+import { PermissionModule } from './permission/permission.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -10,8 +11,9 @@ import { AppService } from './app.service';
       rootPath: join(__dirname, '..', 'api-docs'),
       serveRoot: '/api-docs',
     }),
+    ActorModule,
+    PermissionModule,
+    RoleModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
