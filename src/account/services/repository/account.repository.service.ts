@@ -6,4 +6,10 @@ export class AccountRepositoryService {
       `AccountRepositoryService.getByEmail Not implemented: ${email}`,
     );
   }
+
+  async create(account: Account): Promise<void> {
+    throw new Error(
+      `AccountRepositoryService.create Not implemented: ${account.id}`,
+    );
+  }
 }
