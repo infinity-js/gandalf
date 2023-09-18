@@ -19,7 +19,6 @@ const gandalfConfigSchema = z.object({
 export type GandalfConfigSchema = z.infer<typeof gandalfConfigSchema>;
 
 export const parseEnvVars = (yml: string) => {
-  //Find env using regex ${ENV_VAR}
   const envRegex = /\${(.*?)}/g;
   const envVars = yml.match(envRegex);
 
