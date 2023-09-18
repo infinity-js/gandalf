@@ -3,21 +3,17 @@ import {
   AccountData,
   AccountEmail,
   CreateAccountDTO,
-} from './account.entity.types';
+} from './account.base.entity.types';
 
-export class Account {
+export class AccountBase {
   #data: AccountData;
 
-  private constructor(data: AccountData) {
+  constructor(data: AccountData) {
     this.#data = data;
   }
 
-  static fromData(data: AccountData): Account {
-    return new Account(data);
-  }
-
-  static create(data: CreateAccountDTO): Account {
-    return new Account({
+  static create(data: CreateAccountDTO): AccountBase {
+    return new AccountBase({
       id: ulid(),
       emails: [{ address: data.email, isVerified: false }],
     });

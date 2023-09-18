@@ -1,13 +1,13 @@
-import { Account } from 'src/account/domain/entity/account.entity';
+import { AccountBase } from 'src/account/domain/entity/account.base.entity';
 
 export class AccountRepositoryService {
-  async getByEmail(email: string): Promise<Account> {
+  async getByEmail(email: string): Promise<AccountBase> {
     throw new Error(
       `AccountRepositoryService.getByEmail Not implemented: ${email}`,
     );
   }
 
-  async create(account: Account): Promise<void> {
+  async create(account: AccountBase): Promise<void> {
     throw new Error(
       `AccountRepositoryService.create Not implemented: ${account.id}`,
     );

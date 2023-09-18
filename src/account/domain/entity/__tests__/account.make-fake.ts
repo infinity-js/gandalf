@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { Account } from '../account.entity';
+import { AccountBase } from '../account.base.entity';
 
-export const makeFakeAccount = (): Account => {
-  return Account.fromData({
+export const makeFakeAccount = (): AccountBase => {
+  return new AccountBase({
     id: faker.string.uuid(),
     emails: Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => {
       return {

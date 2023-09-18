@@ -4,7 +4,7 @@ import {
   GetAccountServiceParamsDTO,
   GetAccountServiceResponseDTO,
 } from './account.get.service.types';
-import { Account } from 'src/account/domain/entity/account.entity';
+import { AccountBase } from 'src/account/domain/entity/account.base.entity';
 
 type Params = GetAccountServiceParamsDTO;
 type Response = GetAccountServiceResponseDTO;
@@ -21,7 +21,7 @@ export class GetAccountService {
     return { account };
   }
 
-  private async getAccount(params: Params): Promise<Account | undefined> {
+  private async getAccount(params: Params): Promise<AccountBase | undefined> {
     if (params.by.email) {
       const account = await this.accountRepositoryService.getByEmail(
         params.by.email,

@@ -1,16 +1,16 @@
 import { faker } from '@faker-js/faker';
-import { Account } from './account.entity';
-import { AccountData } from './account.entity.types';
+import { AccountBase } from './account.base.entity';
+import { AccountData } from './account.base.entity.types';
 
 describe('Account Entity (Unit)', () => {
   describe('create', () => {
     it('should create a new account', () => {
       const email = faker.internet.email();
 
-      const account = Account.create({ email });
+      const account = AccountBase.create({ email });
 
       expect(account).toBeDefined();
-      expect(account).toBeInstanceOf(Account);
+      expect(account).toBeInstanceOf(AccountBase);
 
       expect(account.id).toBeDefined();
       expect(account.emails).toHaveLength(1);
@@ -20,13 +20,13 @@ describe('Account Entity (Unit)', () => {
 
   describe('fromData', () => {
     it('should create an account from data', () => {
-      const account = Account.fromData({
+      const account = new AccountBase({
         id: faker.string.uuid(),
         emails: [{ address: faker.internet.email(), isVerified: false }],
       });
 
       expect(account).toBeDefined();
-      expect(account).toBeInstanceOf(Account);
+      expect(account).toBeInstanceOf(AccountBase);
     });
   });
 
@@ -36,7 +36,7 @@ describe('Account Entity (Unit)', () => {
       emails: [{ address: faker.internet.email(), isVerified: false }],
     };
 
-    const account = Account.fromData(accountData);
+    const account = new AccountBase(accountData);
 
     it('should return the id', () => {
       expect(account.id).toBe(accountData.id);

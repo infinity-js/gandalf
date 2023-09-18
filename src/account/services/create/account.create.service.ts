@@ -4,7 +4,7 @@ import {
   CreateAccountServiceParamsDTO,
   CreateAccountServiceResponseDTO,
 } from './account.create.service.types';
-import { Account } from 'src/account/domain/entity/account.entity';
+import { AccountBase } from 'src/account/domain/entity/account.base.entity';
 
 type Params = CreateAccountServiceParamsDTO;
 type Response = CreateAccountServiceResponseDTO;
@@ -18,7 +18,7 @@ export class CreateAccountService {
   async execute(params: Params): Promise<Response> {
     await this.assertConstraints(params);
 
-    const account = Account.create(params.data);
+    const account = AccountBase.create(params.data);
 
     await this.accountRepositoryService.create(account);
 

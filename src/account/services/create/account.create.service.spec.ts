@@ -4,7 +4,7 @@ import { AccountRepositoryService } from '../repository/account.repository.servi
 import { makeFakeAccount } from 'src/account/domain/entity/__tests__/account.make-fake';
 import { CreateAccountServiceParamsDTO } from './account.create.service.types';
 import { faker } from '@faker-js/faker';
-import { Account } from 'src/account/domain/entity/account.entity';
+import { AccountBase } from 'src/account/domain/entity/account.base.entity';
 
 describe('CreateAccountService (unit)', () => {
   let accountRepositoryService: {
@@ -53,7 +53,7 @@ describe('CreateAccountService (unit)', () => {
         data: { email: faker.internet.email() },
       };
 
-      const spy = jest.spyOn(Account, 'create');
+      const spy = jest.spyOn(AccountBase, 'create');
       await createAccountService.execute(params);
 
       expect(spy).toHaveBeenCalledWith(params.data);
@@ -63,7 +63,7 @@ describe('CreateAccountService (unit)', () => {
     it("should call AccountRepositoryService.create with the account returned from Account.create's call", async () => {
       const accountToReturnFromAccountCreate = makeFakeAccount();
       jest
-        .spyOn(Account, 'create')
+        .spyOn(AccountBase, 'create')
         .mockReturnValueOnce(accountToReturnFromAccountCreate);
 
       await createAccountService.execute({

@@ -40,50 +40,6 @@ describe('GoogleOauthService (Unit)', () => {
     configService = {
       get: jest.fn(),
     };
-
-    configService.get.mockReturnValue({
-      google_oauth: {
-        client_id: googleClientId,
-        client_secret: googleClientSecret,
-      },
-    });
-
-    const app = await Test.createTestingModule({
-      providers: [GoogleOAuthService, ConfigService],
-    })
-      .overrideProvider(ConfigService)
-      .useValue(configService)
-      .compile();
-
-    googleOauthService = app.get(GoogleOAuthService);
-  });
-
-  describe('isEnabled check', () => {
-    it('should return true if integrations.google_oauth is defined in config file', async () => {
-      const response = await googleOauthService.isEnabled();
-
-      expect(response).toBe(true);
-    });
-
-    it('should return false if integrations.google_oauth is not defined in config file', async () => {
-      configService.get.mockReturnValue({
-        integrations: {},
-      });
-
-      const appWithoutGoogleOauth = await Test.createTestingModule({
-        providers: [GoogleOAuthService, ConfigService],
-      })
-        .overrideProvider(ConfigService)
-        .useValue(configService)
-        .compile();
-
-      const googleOauthServiceWithoutGoogleOauth =
-        appWithoutGoogleOauth.get(GoogleOAuthService);
-
-      const response = await googleOauthServiceWithoutGoogleOauth.isEnabled();
-
-      expect(response).toBe(false);
-    });
   });
 
   describe('Service is enabled', () => {
@@ -93,7 +49,7 @@ describe('GoogleOauthService (Unit)', () => {
 
     const mockedTokens = 'any_token';
 
-    beforeEach(() => {
+    beforeEach(async () => {
       userInfo = {
         email: faker.internet.email(),
       };
@@ -105,6 +61,22 @@ describe('GoogleOauthService (Unit)', () => {
       mockedOAuth2.userinfo.get.mockResolvedValue({
         data: userInfo,
       });
+
+      configService.get.mockReturnValue({
+        google_oauth: {
+          client_id: googleClientId,
+          client_secret: googleClientSecret,
+        },
+      });
+
+      const app = await Test.createTestingModule({
+        providers: [GoogleOAuthService, ConfigService],
+      })
+        .overrideProvider(ConfigService)
+        .useValue(configService)
+        .compile();
+
+      googleOauthService = app.get(GoogleOAuthService);
     });
 
     describe('verifyCode', () => {
@@ -177,6 +149,31 @@ describe('GoogleOauthService (Unit)', () => {
         await expect(
           googleOauthService.verifyCode({ code }),
         ).rejects.toThrowError('Missing email from google account');
+      });
+    });
+  });
+
+  describe('Service is disabled', () => {
+    beforeEach(async () => {
+      configService.get.mockReturnValue({});
+
+      const app = await Test.createTestingModule({
+        providers: [GoogleOAuthService, ConfigService],
+      })
+        .overrideProvider(ConfigService)
+        .useValue(configService)
+        .compile();
+
+      googleOauthService = app.get(GoogleOAuthService);
+    });
+
+    describe('verifyCode', () => {
+      it('should throw an error', async () => {
+        const code = faker.string.uuid();
+
+        await expect(
+          googleOauthService.verifyCode({ code }),
+        ).rejects.toThrowError('Google OAuth is not enabled');
       });
     });
   });

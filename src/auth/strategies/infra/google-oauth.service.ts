@@ -26,13 +26,11 @@ export class GoogleOAuthService {
     this.#clientSecret = integrations.google_oauth.client_secret;
   }
 
-  async isEnabled(): Promise<boolean> {
-    return this.#isEnabled;
-  }
-
   async verifyCode(
     params: Types.VerifyCode.Params,
   ): Promise<Types.VerifyCode.Response> {
+    if (!this.#isEnabled) throw new Error('Google OAuth is not enabled');
+
     const authClient = new google.auth.OAuth2(
       this.#clientId,
       this.#clientSecret,
